@@ -1,0 +1,69 @@
+version: '3'
+
+services:
+
+  # Python Service deps
+
+  pythongameservice:
+    build:
+      context: .
+      dockerfile: PythonGameService/service/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVICE_NAME=PythonGameService
+      - SERVICE_PORT=8080
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_SERVICE_NAME=PythonGameService
+      - OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED=true
+    depends_on:
+      - otel-collector
+
+  locust-pythongameservice:
+    image: locustio/locust
+    command: -P 8089 -f /locust-tasks/locustfile.py --host http://pythongameservice:8080
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./PythonGameService/:/locust-tasks
+    depends_on:
+      - pythongameservice
+
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    ports:
+      - "4317:4317"
+    volumes:
+      - ./PythonGameService/config/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    command: [ "--config=/etc/otel-collector-config.yaml" ]
+
+  # Jaeger
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+      - SPAN_STORAGE_TYPE=memory
+      - QUERY_BASE_PATH=/jaeger
+      - COLLECTOR_PORT=14250
+      - HTTP_PORT=14268
+      - GRPC_PORT=14250
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+    command:
+      - "--memory.max-traces=5000"
+      - "--query.base-path=/jaeger/ui"
+    ports:
+      - "16686:16686"
+      - "4318:4318"
+      - "4319:4317"
+      - "14250:14250"
+      - "14268:14268"
+
+  # Grafana
+
+  grafana:
+    image: grafana/grafana:10.4.0
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
