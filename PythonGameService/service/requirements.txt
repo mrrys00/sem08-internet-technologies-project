@@ -1,0 +1,10 @@
+asyncio
+fastapi
+requests
+starlette
+uvicorn
+flask[async]
+flask
+opentelemetry-exporter-otlp
+opentelemetry-distro
+opentelemetry-distro[otlp]
