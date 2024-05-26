@@ -12,3 +12,11 @@ providers:
     editable: true
     options:
       path: /etc/grafana/provisioning/dashboards/demo
+  - name: 'GoDemo Service Dashboard'
+    orgId: 1
+    folder: 'GoDemo Service Dashboard'
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/godemoservice
