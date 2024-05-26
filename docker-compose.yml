@@ -52,6 +52,16 @@ services:
       - OTEL_EXPORTER_OTLP_INSECURE=true
       - OTEL_SERVICE_NAME=godemoservice
 
+  locust-godemoserv:
+    image: locustio/locust
+    command: -P 8084 -f /locust-tasks/locustfile.py --host http://godemoserv:8083
+    ports:
+      - "8084:8084"
+    volumes:
+      - ./GoDemoService/:/locust-tasks
+    depends_on:
+      - godemoserv
+
   # Jaeger
 
   jaeger:
@@ -73,16 +83,6 @@ services:
       - "4319:4317"
       - "14250:14250"
       - "14268:14268"
-
-  locust-godemoserv:
-    image: locustio/locust
-    command: -P 8084 -f /locust-tasks/locustfile.py --host http://godemoserv:8083
-    ports:
-      - "8084:8084"
-    volumes:
-      - ./GoDemoService/:/locust-tasks
-    depends_on:
-      - godemoserv
 
   # Grafana
 
