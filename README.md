@@ -140,7 +140,7 @@ Choose Jaeger as the database:
 
 Then on the botton panel you can select *Search* as *Query Type*, and choose service and operation name:
 
-![Grafana4](./img/Grafana-step4.png)
+![Grafana4](./img/grafana-step4.png)
 
 Then you can start creating panels.
 
