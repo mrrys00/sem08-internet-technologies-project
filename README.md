@@ -15,7 +15,7 @@ Unlike traditional observability tools, OpenTelemetry focuses on the lifecycle o
 
 ## High-Level Architecture Overview
 
-![architecture](./architecture.png)
+![architecture](./img/architecture.png)
 *Architecture of framework from OpenTelemetry Docs*
 
 The architecture of OpenTelemetry clients is built around "signals" - distinct types of observability data such as traces, metrics, and baggage. These signals function autonomously yet rely on a shared mechanism for the propagation of context. This setup positions OpenTelemetry as a versatile tool, capable of integrating with different software components to enhance insight into system operations.
@@ -71,7 +71,7 @@ The HTTP protocols uses Protobuf payloads encoded either in binary format or in 
 
 This case study aims to showcase the capabilities of the OpenTelemetry framework in monitoring network traffic and measuring system performance. Utilizing observability backends such as Jaeger and Grafana, we will explore how OpenTelemetry provides visibility into the system's internal operations. Our example involves a simulated environment with two services, that will be generating automated HTTP requests through Locust clients, we will simulate traffic within this system to demonstrate OpenTelemetry's effectiveness in tracking and analyzing system behavior and performance metrics.
 
-![Case Study Architecture Diagram](./SUU_architecture.svg)
+![Case Study Architecture Diagram](./img/architecture.svg)
 
 The system made for the purpose of this case study consists of:
 
@@ -81,3 +81,72 @@ The system made for the purpose of this case study consists of:
 - Python service = http://localhost:8080
 
 Services are instantiated and configured as Docker containers within a Docker Compose setup to be able to communicate with the system.  Both services are flooded with HTTP requests created by two Locust clients, which simulates network traffic within the application. Docker Compose are also responsible for connecting generated metrics with observability backends, to display them in the user-friendly form. Those backends are Jaeger and Grafana.
+
+# Demo Setup
+
+## Running docker compose
+
+To run all neccessary services just use:
+
+> docker-compose up
+
+## Configuring Locust
+
+To configure the Locust services go to:
+- localhost:8089 (pyhtongameservice)
+- localhost:8084 (godemoserv)
+
+Then configure *Number of users* and *Ramp Up*.
+
+![Loucst UI](./img/locust-ui.png)
+*Locust UI*
+
+![Locust UI](./img/running-locust.png)
+*Locust Running Tests*
+
+## Jaeger Configuration
+
+Go to Jaeger UI: localhost:16686
+
+On the left panel select service, and all operations. After that you can observe the traces send by OTel Collector
+
+![Jaeger UI](./img/Jaeger-UI.png)
+*Jaeger UI*
+
+![Jaeger Trace View](./img/Jaeger-Detailed-View.png)
+*Jaeger Trace View*
+
+## Grafana Configuration
+
+Go to Grafana UI: localhost:3000
+
+and login with credentials:
+- username: admin
+- password: admin
+
+Grafana will ask to change the default password, you can skip this step
+
+Go to *Dashboard* section on the left panel and click *New* button.
+
+![Grafana1](./img/Grafana-step1.png)
+
+Then click *Add visualization*:
+
+![Grafana2](./img/Grafana-step2.png)
+
+Choose Jaeger as the database:
+![Grafana2](./img/Grafana-step3.png)
+
+
+Then on the botton panel you can select *Search* as *Query Type*, and choose service and operation name:
+
+![Grafana4](./img/Grafana-step4.png)
+
+Then you can start creating panels.
+
+## Example Graphana panel
+
+Here we present a demonstration panel, with configuration stored in a JSON file: *example.json*. This panel showcases crucial data including the average time per request, request graph, a trace table, and an associated log table for these traces. Additionally, we display the duration of the last request made.
+
+![Grafana Panel](./img/Grafana-panel1.png)
+*Grafana Panel*
