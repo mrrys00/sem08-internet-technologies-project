@@ -71,7 +71,7 @@ The HTTP protocols uses Protobuf payloads encoded either in binary format or in 
 
 This case study aims to showcase the capabilities of the OpenTelemetry framework in monitoring network traffic and measuring system performance. Utilizing observability backends such as Jaeger and Grafana, we will explore how OpenTelemetry provides visibility into the system's internal operations. Our example involves a simulated environment with two services, that will be generating automated HTTP requests through Locust clients, we will simulate traffic within this system to demonstrate OpenTelemetry's effectiveness in tracking and analyzing system behavior and performance metrics.
 
-![Case Study Architecture Diagram](./img/suu-architecture.svg)
+![Case Study Architecture Diagram](./img/demo-architecture.svg)
 
 The system made for the purpose of this case study consists of:
 
